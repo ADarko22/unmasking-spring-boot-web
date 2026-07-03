@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: URL Shortener in Spring Boot
+
+server:
+  port: 3000
