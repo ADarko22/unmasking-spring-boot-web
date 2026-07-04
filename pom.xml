@@ -11,14 +11,14 @@
 
     <modules>
         <module>url-shortener-spring</module>
-        <module>url-shortener-native</module>
+        <module>url-shortener-plain</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
         <maven.compiler.release>21</maven.compiler.release>
     </properties>
-    
+
     <build>
         <finalName>unmasking-spring-boot-web</finalName>
     </build>
