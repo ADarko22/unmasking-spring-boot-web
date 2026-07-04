@@ -38,7 +38,8 @@ public class URLShortenerController {
                 });
     }
 
-    @GetMapping("/{shortUrlHash}")
+    // Restrict the path variable to only alphanumeric characters using Regex
+    @GetMapping("/{shortUrlHash:[a-zA-Z0-9]+}")
     ResponseEntity<Void> redirect(@PathVariable String shortUrlHash) {
         return urlShortenerService.restoreUrl(shortUrlHash)
                 .<ResponseEntity<Void>>map(value -> ResponseEntity.status(HttpStatus.FOUND).location(value).build())

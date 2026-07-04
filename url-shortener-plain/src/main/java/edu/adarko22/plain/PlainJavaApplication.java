@@ -30,10 +30,15 @@ public class PlainJavaApplication {
 
     private static RequestDispatcher createRequestHandlers() {
         var urlShortenerController = new URLShortenerController();
+        var staticPageController = new StaticPageController();
         return new RequestDispatcher()
                 .addHandler(
                         new RequestDispatcher.Route("POST", "^/shorten$"),
                         urlShortenerController::urlShortener
+                )
+                .addHandler(
+                        new RequestDispatcher.Route("GET", "^/$"),
+                        staticPageController::index
                 )
                 .addHandler(
                         new RequestDispatcher.Route("GET", "^/[a-zA-Z0-9]+$"),
