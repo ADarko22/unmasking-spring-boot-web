@@ -1,6 +1,9 @@
 spring:
   application:
     name: URL Shortener in Spring Boot
+  threads:
+    virtual:
+      enabled: true
 
 server:
   port: 3000
