@@ -15,7 +15,6 @@ public class URLShortenerService {
     private final ConcurrentHashMap<String, String> urlToHash = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, String> hashToUrl = new ConcurrentHashMap<>();
     private final HashGenerator hashGenerator = new HashGenerator();
-    private final String baseUrl = "http://localhost:3000/";
 
     Optional<String> shortenUrl(String url) {
         if (!isValidUrl(url))
@@ -28,7 +27,7 @@ public class URLShortenerService {
             return newHash;
         });
 
-        return Optional.of(shortHash).map(it -> baseUrl + it);
+        return Optional.of(shortHash);
     }
 
     Optional<URI> restoreUrl(String shortHash) {
