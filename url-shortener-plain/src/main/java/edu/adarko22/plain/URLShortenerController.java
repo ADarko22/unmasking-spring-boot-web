@@ -1,6 +1,7 @@
 package edu.adarko22.plain;
 
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpsServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.databind.ObjectMapper;
@@ -25,10 +26,11 @@ public class URLShortenerController {
 
         if (shortUrl.isPresent()) {
             exchange.getResponseHeaders().add("Content-Type", "application/json");
-            var shortUrlUri = URI.create(shortUrl.get());
+            var baseUrl = extractBaseUrl(exchange);
+            var shortUrlUri = URI.create(baseUrl + "/" + shortUrl.get());
             exchange.getResponseHeaders().add("Location", shortUrlUri.toString());
 
-            var response = new ShortenerResponse(request.url, shortUrl.get());
+            var response = new ShortenerResponse(request.url, shortUrlUri.toString());
             var responseBytes = mapper.writeValueAsBytes(response);
 
             sendResponse(exchange, 201, responseBytes);
@@ -58,6 +60,20 @@ public class URLShortenerController {
             LOGGER.error(errorMessage);
             throw new IllegalStateException(errorMessage, e);
         }
+    }
+
+    private String extractBaseUrl(HttpExchange exchange) {
+        String scheme = (exchange.getHttpContext().getServer() instanceof HttpsServer)
+                ? "https"
+                : "http";
+
+        String host = exchange.getRequestHeaders().getFirst("Host");
+
+        if (host == null) {
+            host = "localhost:" + exchange.getLocalAddress().getPort();
+        }
+
+        return scheme + "://" + host;
     }
 
     private void sendResponse(HttpExchange exchange, int statusCode, byte[] payload) {
